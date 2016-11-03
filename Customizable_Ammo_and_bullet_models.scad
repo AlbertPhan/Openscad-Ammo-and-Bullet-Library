@@ -10,13 +10,14 @@
 $fn = 100;
 
 
+
 // Customizable stuff
 /* [Global] */
 
 // Choose the cartridge
-cartridge = "30-06 Springfield";	// [30-06 Springfield, .357 magnum, custom]
+cartridge = "9mm";	// [30-06 Springfield, .357 magnum, 9mm]
 // Type of bullet
-bulletType = "rifleroundnose";		// [roundnose, pistolroundnose rifleroundnose, pointed, roundflat,semiwadcutter, wadcutter, pistolhollowpoint, riflehollowpoint]
+bulletType = "pistolroundnose";		// [ballnose, pistolroundnose rifleroundnose, pointed, roundflat,semiwadcutter, wadcutter, pistolhollowpoint, riflehollowpoint]
 // boatTail if making bullet only
 boatTail = true;				//
 // Make the cartridge or just the bullet
@@ -24,6 +25,8 @@ part = "cartridge";					// [cartridge, bullet]
 
 /* [Custom] */
 
+// Make custome cartridge
+//makeCustomCartridge();
 // TO DO: add customizer options to make customized cartridge
 // From wikipedia images of cartridges dimensions
 /*
@@ -42,19 +45,14 @@ neckBaseHeight 		// L2
 caseLength 			// L3
 overallLength			// L6
 bulletDiameter			// G1
-bulletType = "2roundnose")				// roundnose, 2roundnose, pointed, roundflat, wadcutter, hollowpoint
+bulletType = "ballnose")		// [ballnose, pistolroundnose rifleroundnose, pointed, roundflat,semiwadcutter, wadcutter, pistolhollowpoint, riflehollowpoint]
 */
 
 
-// Testing model
-//makeCartridge("30-06 Springfield", "2roundnose", true);
-
 if(part == "cartridge")
 {
-	if(cartridge == "custom")
-		makeCustomCartridge();
-	else
-		makeCartridge(cartridge, bulletType, boatTail);
+	
+		makeCartridge(cartridge, bulletType, boatTail, bulletOnly = false);
 }
 else if(part == "bullet")
 {
@@ -69,12 +67,46 @@ module makeCartridge(cartridge, bulletType, boatTail, bulletOnly)
 		
 	if (cartridge == "30-06 Springfield")
 	{
-		makeCustomCartridge("rifle", 1.24,12.01,10.39,0.84,3.16,11.96,11.2,8.63,49.49,53.56,63.35,84.84,7.85, bulletType);
-		//makeBullet(7.85, 84.84 - 63.35, bulletType, boatTail);	// bullet only for making dummy rounds with real cases
+		if(bulletOnly == true)
+		{
+			color("chocolate")
+				makeCustomBullet(7.85, 84.84-63.35, bulletType, boatTail);
+		} 
+		else 
+		{
+			makeCustomCartridge("rifle", 1.24,12.01,10.39,0.84,3.16,11.96,11.2,8.63,49.49,53.56,63.35,84.84,7.85, bulletType);
+			
+		}
+
 	}
 	else if (cartridge == ".357 magnum")
 	{
-		makeCustomCartridge("pistol", 1.5,11.2,0,0,0,9.6,0,0,0,0,33,40,9.1, bulletType);
+		if(bulletOnly == true)
+		{
+			// TODO: bullet only here
+			color("chocolate")
+				makeCustomBullet(9.1, 40-33, bulletType, boatTail);
+		}
+		else
+		{
+			makeCustomCartridge("pistol", 1.5,11.2,0,0,0,9.6,0,0,0,0,33,40,9.1, bulletType);	
+			
+		}
+	}
+	// add more cartridges
+	else if (cartridge == "9mm")
+	{
+		if(bulletOnly == true)
+		{
+			// TODO: bullet only here
+			color("chocolate")
+				makeCustomBullet(9.03, 29.69-19.15, bulletType, boatTail);
+		}
+		else
+		{
+			makeCustomCartridge("pistol", 1.27, 9.96, 8.79,0.90,2.98,9.93,0,0,0,0,19.15,29.69,9.03, bulletType);	
+			
+		}
 	}
 }
 		
@@ -95,15 +127,12 @@ neckBaseHeight, 		// L2
 caseLength, 			// L3
 overallLength, 			// L6
 bulletDiameter,			// G1
-bulletType = "2roundnose")				// roundnose, 2roundnose, pointed, roundflat, wadcutter, hollowpoint
+bulletType = "ballnose")			// [ballnose, pistolroundnose rifleroundnose, pointed, roundflat,semiwadcutter, wadcutter, pistolhollowpoint, riflehollowpoint]
 {
-	if(bulletOnly == true)
-	{
-		color("chocolate")
-			makeCustomBullet(bulletDiameter, overallLength - caseLength, bulletType);
-	}
+
 	// Sanity check for overall length
 	//%cylinder(d = rimDiameter, h = overallLength);
+	
 	// Rim
 	cylinder(d = rimDiameter, h = rimThickness); 
 	translate([0,0,rimThickness])
@@ -162,7 +191,7 @@ module makeCustomBullet(bulletDiameter, bulletHeight, bulletType = "rifleroundno
 		makeRoundnose(1.5);
 		
 	}
-	else if (bulletType == "roundnose")
+	else if (bulletType == "ballnose")
 	{
 		makeRoundnose(1);
 		
@@ -189,7 +218,7 @@ module makeCustomBullet(bulletDiameter, bulletHeight, bulletType = "rifleroundno
 	}
 	else if(bulletType == "semiwadcutter")
 	{
-		cylinder(d = bulletDiameter, h = bulletHeight - bulletHeight* 0.9);
+		cylinder(d = bulletDiameter, h = bulletHeight - bulletHeight* 0.7);
 		translate([0,0,(bulletHeight) * 0.1])
 			cylinder(d1 = bulletDiameter * 0.9, d2 = bulletDiameter * 0.8, h = bulletHeight * 0.9);
 	}
@@ -213,11 +242,30 @@ module makeCustomBullet(bulletDiameter, bulletHeight, bulletType = "rifleroundno
 				cylinder(d = bulletDiameter, h = bulletHeight);
 		}
 	}
-	
+	else if(bulletType == "riflehollowpoint")
+	{
+		hollowPointOgive = 2;
+		hollowPointDepth = 3;
+		difference()
+		{
+			union()
+				{
+				translate([0,0, hollowPointOgive])
+					makeRoundnose(4);
+				cylinder(d = bulletDiameter, h = hollowPointOgive);
+				}
+			// hollowpoint cutout
+			translate([0,0, bulletHeight-hollowPointDepth])
+				cylinder(d1 = bulletDiameter * 0.1, d2 = bulletDiameter * 0.4, h = hollowPointDepth + 0.1);
+			// flatten bullet tip
+			translate([0,0, bulletHeight]) 
+				cylinder(d = bulletDiameter, h = bulletHeight);
+		}
+	}
 	// Add bottom length of bullet (going inside cartridge)
 	// When making bullet only, this will make a proper length bullet to be seated into an empty casing
-	// Make boattail or just cylinder
 	
+	// Make boattail or just cylinder
 	if(boatTail)
 	{
 		boatTailLength = bulletDiameter * (1 - tan(10));
