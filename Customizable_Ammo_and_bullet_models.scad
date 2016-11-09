@@ -15,43 +15,19 @@ $fn = 100;
 /* [Global] */
 
 // Choose the cartridge
-cartridge = "9mm";	// [30-06 Springfield, .357 magnum, 9mm]
+cartridge = "9mm";	// [30-06 Springfield, 308 Winchester, 303 British, 223 Remington, 357 magnum, 9mm]
 // Type of bullet
-bulletType = "pistolroundnose";		// [ballnose, pistolroundnose rifleroundnose, pointed, roundflat,semiwadcutter, wadcutter, pistolhollowpoint, riflehollowpoint]
+bulletType = "pistolhollowpoint";		// [ballnose, pistolroundnose rifleroundnose, pointed, roundflat,semiwadcutter, wadcutter, pistolhollowpoint, riflehollowpoint]
 // boatTail if making bullet only
-boatTail = true;				//
+boatTail = false;				//
 // Make the cartridge or just the bullet
 part = "cartridge";					// [cartridge, bullet]
 
-/* [Custom] */
 
-// Make custome cartridge
-//makeCustomCartridge();
-// TO DO: add customizer options to make customized cartridge
-// From wikipedia images of cartridges dimensions
-/*
-// Rifle or Pistol (bottle neck or straight case)
-cartridgeType = "rifle"	// [rifle,pistol] 
-rimThickness 	// R
-rimDiameter	// R1
-extractorGrooveDiameter	// E1
-extractorGrooveThickness	// e
-extractorTaperHeight		// E
-baseDiameter			// P1
-shoulderDiameter 		// P2
-neckDiameter			// H1
-shoulderBaseHeight 	// L1
-neckBaseHeight 		// L2
-caseLength 			// L3
-overallLength			// L6
-bulletDiameter			// G1
-bulletType = "ballnose")		// [ballnose, pistolroundnose rifleroundnose, pointed, roundflat,semiwadcutter, wadcutter, pistolhollowpoint, riflehollowpoint]
-*/
-
+// End Customizable stuff
 
 if(part == "cartridge")
 {
-	
 		makeCartridge(cartridge, bulletType, boatTail, bulletOnly = false);
 }
 else if(part == "bullet")
@@ -60,8 +36,8 @@ else if(part == "bullet")
 	makeCartridge(cartridge, bulletType, boatTail, true);
 }
 
-		
-
+	
+//makeCartridge creates a cartridge based on the cartridge you pass to it. It can also do the bullet only if specified.
 module makeCartridge(cartridge, bulletType, boatTail, bulletOnly)
 {
 		
@@ -74,26 +50,112 @@ module makeCartridge(cartridge, bulletType, boatTail, bulletOnly)
 		} 
 		else 
 		{
-			makeCustomCartridge("rifle", 1.24,12.01,10.39,0.84,3.16,11.96,11.2,8.63,49.49,53.56,63.35,84.84,7.85, bulletType);
+			makeCustomCartridge(
+			cartridgeType 				= "rifle",	// [rifle,pistol] 
+			rimThickness				= 1.24,		// R
+			rimDiameter					= 12.01,	// R1
+			extractorGrooveDiameter		= 10.39, 		// E1
+			extractorGrooveThickness 	= 0.84,		// e
+			extractorTaperHeight 		= 3.16,		// E if no groove then use R rimThickness
+			baseDiameter 				= 11.96,	// P1
+			shoulderDiameter 			= 11.2, 	// P2
+			neckDiameter				= 8.63,		// H1
+			shoulderBaseHeight 			= 49.49,	// L1
+			neckBaseHeight 				= 53.56,	// L2
+			caseLength 					= 63.35,	// L3
+			overallLength				= 84.84,	// L6
+			bulletDiameter				= 7.85,		// G1
+			bulletType = bulletType);		
+		}
+
+	}
+	else if (cartridge == "223 Remington")
+	{
+		if(bulletOnly == true)
+		{
+			color("chocolate")
+				makeCustomBullet(5.70, 57.40-44.70, bulletType, boatTail);
+		} 
+		else 
+		{
+			makeCustomCartridge(
+			cartridgeType 				= "rifle",	// [rifle,pistol] 
+			rimThickness				= 1.14,		// R
+			rimDiameter					= 9.60,	// R1
+			extractorGrooveDiameter		= 8.43, 		// E1
+			extractorGrooveThickness 	= 0.76,		// e
+			extractorTaperHeight 		= 3.13,		// E if no groove then use R rimThickness
+			baseDiameter 				= 9.58,	// P1
+			shoulderDiameter 			= 9.0, 	// P2
+			neckDiameter				= 6.43,		// H1
+			shoulderBaseHeight 			= 36.52,	// L1
+			neckBaseHeight 				= 39.55,	// L2
+			caseLength 					= 44.70,	// L3
+			overallLength				= 57.40,	// L6
+			bulletDiameter				= 5.70,		// G1
+			bulletType = bulletType);		
+		}
+
+	}
+	else if (cartridge == "308 Winchester")
+	{
+		if(bulletOnly == true)
+		{
+			color("chocolate")
+				makeCustomBullet(7.85, 71.12-51.18, bulletType, boatTail);
+		} 
+		else 
+		{
+			makeCustomCartridge(
+			cartridgeType 				= "rifle",	// [rifle,pistol] 
+			rimThickness				= 1.37,		// R
+			rimDiameter					= 12.01,	// R1
+			extractorGrooveDiameter		= 10.39, 		// E1
+			extractorGrooveThickness 	= 1.40,		// e
+			extractorTaperHeight 		= 3.85,		// E if no groove then use R rimThickness
+			baseDiameter 				= 11.96,	// P1
+			shoulderDiameter 			= 11.53, 	// P2
+			neckDiameter				= 8.72,		// H1
+			shoulderBaseHeight 			= 39.62,	// L1
+			neckBaseHeight 				= 43.48,	// L2
+			caseLength 					= 51.18,	// L3
+			overallLength				= 71.12,	// L6
+			bulletDiameter				= 7.85,		// G1
+			bulletType = bulletType);
+
 			
 		}
 
 	}
-	else if (cartridge == ".357 magnum")
+	else if (cartridge == "303 British")
 	{
 		if(bulletOnly == true)
 		{
-			// TODO: bullet only here
 			color("chocolate")
-				makeCustomBullet(9.1, 40-33, bulletType, boatTail);
-		}
-		else
+				// makeCustomBullet(bulletDiameter, bulletHeight, bulletType = "rifleroundnose", boatTail = false)
+				makeCustomBullet(7.92, 78.11-56.44, bulletType, boatTail); 
+		} 
+		else 
 		{
-			makeCustomCartridge("pistol", 1.5,11.2,0,0,0,9.6,0,0,0,0,33,40,9.1, bulletType);	
-			
-		}
+			makeCustomCartridge(
+			cartridgeType 				= "rifle",	// [rifle,pistol] 
+			rimThickness				= 1.63,		// R
+			rimDiameter					= 13.72,	// R1
+			extractorGrooveDiameter		= 0, 		// E1
+			extractorGrooveThickness 	= 0,		// e
+			extractorTaperHeight 		= 1.63,		// E if no groove then use R rimThickness
+			baseDiameter 				= 11.68,	// P1
+			shoulderDiameter 			= 10.18, 	// P2
+			neckDiameter				= 8.64,		// H1
+			shoulderBaseHeight 			= 45.47,	// L1
+			neckBaseHeight 				= 48.01,	// L2
+			caseLength 					= 56.44,	// L3
+			overallLength				= 78.11,	// L6
+			bulletDiameter				= 7.92,		// G1
+			bulletType = bulletType);
+		}	
+
 	}
-	// add more cartridges
 	else if (cartridge == "9mm")
 	{
 		if(bulletOnly == true)
@@ -104,13 +166,27 @@ module makeCartridge(cartridge, bulletType, boatTail, bulletOnly)
 		}
 		else
 		{
-			makeCustomCartridge("pistol", 1.27, 9.96, 8.79,0.90,2.98,9.93,0,0,0,0,19.15,29.69,9.03, bulletType);	
-			
+						makeCustomCartridge(
+			cartridgeType 				= "pistol",	// [rifle,pistol] 
+			rimThickness				= 1.27,		// R
+			rimDiameter					= 9.96,		// R1
+			extractorGrooveDiameter		= 8.79, 	// E1
+			extractorGrooveThickness 	= 0.90,		// e
+			extractorTaperHeight 		= 2.98,		// E if no groove then use R rimThickness
+			baseDiameter 				= 9.93,		// P1
+			shoulderDiameter 			= 0, 		// P2
+			neckDiameter				= 0,		// H1
+			shoulderBaseHeight 			= 0,		// L1
+			neckBaseHeight 				= 0,		// L2
+			caseLength 					= 19.15,	// L3
+			overallLength				= 29.69,	// L6
+			bulletDiameter				= 9.03,		// G1
+			bulletType = bulletType);				
 		}
 	}
 }
 		
-
+// makeCustomCartridge creates a cartridge based on the dimensions of the cartridge you pass to it.
 module makeCustomCartridge(
 // From wikipedia images of cartridges dimensions
 cartridgeType,	// rifle or pistol (bottle neck or straight case)
@@ -171,7 +247,6 @@ bulletType = "ballnose")			// [ballnose, pistolroundnose rifleroundnose, pointed
 						color("chocolate")
 							makeCustomBullet(bulletDiameter, overallLength - caseLength, bulletType);
 				}
-				
 			}
 		}
 	}
@@ -179,6 +254,8 @@ bulletType = "ballnose")			// [ballnose, pistolroundnose rifleroundnose, pointed
 
 module makeCustomBullet(bulletDiameter, bulletHeight, bulletType = "rifleroundnose", boatTail = false)
 {
+	
+	
 	boatTailLength = bulletDiameter*(1-tan(10));
 	
 	// Bullettype
